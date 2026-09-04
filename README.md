@@ -1,3 +1,23 @@
+# CylinderFlow stride-8: EAGLE adaptation
+
+This independent private copy preserves `eagle-dataset/EagleMeshTransformer` at `06a87712a4b51cf0bffd9a47b57441941198174b` and its MIT license. Use [installation and commands](CYLINDERFLOW.md), [the common data/evaluation contract](DATA_CONTRACT.md), and [machine-readable acceptance](ACCEPTANCE.json).
+
+The full native GraphViT uses width 512 (10,317,956 parameters), four graph encoder blocks, four attention blocks, four heads, and state `[u,v,p,q]` with `q=0.5*(u*u+v*v)`. It retains differentiable six-frame rollout training and loss `MSE(delta_uv)+0.1*MSE(delta_pq)` over physical nodes. Each Train trajectory contributes one window with inclusive start 0..59 per epoch. Defaults retain 1,000 epochs × 1,000 windows, Adam 1e-4 without a scheduler, batch 2 via microbatch 1 × accumulation 2, and the author's zero-noise default. Author capacity-constrained geometric clustering uses capacity 10; it is performed once per static mesh. Actual windows and optimizer updates are logged.
+
+After installation and preparation, with `DATA` and `MANIFEST` set as in the guide:
+
+```bash
+git remote add upstream https://github.com/eagle-dataset/EagleMeshTransformer.git
+python -m cylinderflow train --dataset "$DATA" --manifest "$MANIFEST" --prepared runs/prepared --device cuda --output-dir runs/train
+python -m cylinderflow resume --dataset "$DATA" --manifest "$MANIFEST" --prepared runs/prepared --checkpoint runs/train/last.pt --device cuda --output-dir runs/train
+```
+
+Use train for a new run or resume for an existing run. The native `GraphViT.forward` now accepts explicit `boundary_values` and `boundary_channels`; this adapter always supplies first-frame inlet/wall velocity only. It never writes future pressure, q or outlet truth into recurrent state. Legacy callers retain their original API. Both raw predictions before boundary writeback and physical `[65,N,3]` UVP outputs are saved. The ghost node is excluded from losses and metrics. `clusterize_eagle.py` parses its old command-line flags only when executed directly, allowing the author clustering function to be imported without running its old data loader.
+
+CPU acceptance covers the full model, exact resume, complete 64-step rollout and media; explicit future-state perturbation checks the boundary/pressure channels. GPU/mixed-precision/maximum-graph acceptance is a separate cluster command; no formal long training was launched. Original upstream documentation and public pretrained assets follow for provenance. The new workflow does not use those weights.
+
+---
+
 # EAGLE: Large-scale Learning of Turbulent Fluid Dynamics with Mesh Transformers
  
 This repository contains the code associated to the paper <a href="https://openreview.net/forum?id=mfIX4QpsARJ">EAGLE: Large-scale Learning of Turbulent Fluid Dynamics with Mesh Transformers</a>

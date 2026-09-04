@@ -1,0 +1,5 @@
+--extra-index-url https://download.pytorch.org/whl/cu118
+--find-links https://data.pyg.org/whl/torch-2.4.0+cu118.html
+-r requirements-cylinderflow.txt
+torch==2.4.0+cu118
+torch-scatter==2.1.2+pt24cu118
