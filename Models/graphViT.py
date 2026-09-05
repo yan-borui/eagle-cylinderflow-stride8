@@ -40,6 +40,7 @@ class GraphViT(nn.Module):
         boundary_values=None,
         boundary_channels=None,
         return_boundary_raw=False,
+        forecast_only=False,
     ):
         """Optional explicit boundary data removes future-field dependence in rollout.
 
@@ -58,7 +59,7 @@ class GraphViT(nn.Module):
             state[:, 0][mask] = state[:, 0][mask] + noise[mask]
 
         state_hat, output_hat = [state[:, 0]], []
-        raw_states = [state[:, 0]]
+        raw_states = [state[:, 0]] if return_boundary_raw else None
         target = []
 
         for t in range(1, state.shape[1]):
@@ -95,9 +96,11 @@ class GraphViT(nn.Module):
                 W, V, clusters[:, t - 1], mesh_posenc, edges[:, t - 1], E
             )
             next_state = state_hat[-1] + next_output
-            raw_states.append(next_state.clone())
+            if return_boundary_raw:
+                raw_states.append(next_state.clone())
 
-            target.append(state[:, t] - state_hat[-1])
+            if not forecast_only:
+                target.append(state[:, t] - state_hat[-1])
 
             # Following MGN, we force the boundary conditions at each steps
             mask = torch.logical_or(
@@ -122,9 +125,12 @@ class GraphViT(nn.Module):
                 )
 
             state_hat.append(next_state)
-            output_hat.append(next_output)
+            if not forecast_only:
+                output_hat.append(next_output)
 
         velocity_hat = torch.stack(state_hat, dim=1)
+        if forecast_only:
+            return velocity_hat
         output_hat = torch.stack(output_hat, dim=1)
 
         target = torch.stack(target, dim=1)
