@@ -1,8 +1,8 @@
 # CylinderFlow stride-8: EAGLE adaptation
 
-This independent private copy preserves `eagle-dataset/EagleMeshTransformer` at `06a87712a4b51cf0bffd9a47b57441941198174b` and its MIT license. Use [installation and commands](CYLINDERFLOW.md), [the common data/evaluation contract](DATA_CONTRACT.md), and [machine-readable acceptance](ACCEPTANCE.json).
+This independent private copy preserves `eagle-dataset/EagleMeshTransformer` at `06a87712a4b51cf0bffd9a47b57441941198174b` and its MIT license. Use [installation and commands](CYLINDERFLOW.md), [the common data/evaluation contract](DATA_CONTRACT.md), and [current alignment verification](ALIGNMENT_VERIFICATION.json) and [prior prefix65 acceptance](ACCEPTANCE.json).
 
-The full native GraphViT uses width 512 (10,317,956 parameters), four graph encoder blocks, four attention blocks, four heads, and state `[u,v,p,q]` with `q=0.5*(u*u+v*v)`. It retains differentiable six-frame rollout training and loss `MSE(delta_uv)+0.1*MSE(delta_pq)` over physical nodes. Each Train trajectory contributes one window with inclusive start 0..59 per epoch. Defaults retain 1,000 epochs × 1,000 windows, Adam 1e-4 without a scheduler, batch 2 via microbatch 1 × accumulation 2, and the author's zero-noise default. Author capacity-constrained geometric clustering uses capacity 10; it is performed once per static mesh. Actual windows and optimizer updates are logged.
+The full native GraphViT uses width 512 (10,317,956 parameters), four graph encoder blocks, four attention blocks, four heads, and state `[u,v,p,q]` with `q=0.5*(u*u+v*v)`. It retains differentiable six-frame rollout training and loss `MSE(delta_uv)+0.1*MSE(delta_pq)` over physical nodes. Each Train trajectory contributes one window with inclusive start 0..69 per epoch. Defaults retain 1,000 epochs × 1,000 windows, Adam 1e-4 without a scheduler, batch 2 via microbatch 1 × accumulation 2, and the author's zero-noise default. Author capacity-constrained geometric clustering uses capacity 10; it is performed once per static mesh. Actual windows and optimizer updates are logged.
 
 After installation and preparation, with `DATA` and `MANIFEST` set as in the guide:
 
