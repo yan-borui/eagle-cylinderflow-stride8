@@ -1,5 +1,8 @@
 # CylinderFlow stride-8: EAGLE adaptation
 
+The optional [four-GPU DDP recipe](FOUR_GPU.md) uses global batch 4 and the native
+1,000-epoch constant-LR budget. Original single-device commands remain below.
+
 Use [the matched performance benchmark](PERFORMANCE.md) for cross-method inference speed and GPU-memory cost after checkpoint selection.
 
 This independent private copy preserves `eagle-dataset/EagleMeshTransformer` at `06a87712a4b51cf0bffd9a47b57441941198174b` and its MIT license. Use [installation and commands](CYLINDERFLOW.md), [the common data/evaluation contract](DATA_CONTRACT.md), and [current alignment verification](ALIGNMENT_VERIFICATION.json) and [prior prefix65 acceptance](ACCEPTANCE.json).
