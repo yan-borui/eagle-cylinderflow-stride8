@@ -1,5 +1,7 @@
 # CylinderFlow stride-8: EAGLE adaptation
 
+**同机推理测速与 Validation100：**[运行说明与 Pareto 绘图交接](PARETO.md)。
+
 The optional [four-GPU DDP recipe](FOUR_GPU.md) uses global batch 4 and the native
 1,000-epoch constant-LR budget. Original single-device commands remain below.
 
