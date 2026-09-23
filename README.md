@@ -1,5 +1,7 @@
 # CylinderFlow stride-8: EAGLE adaptation
 
+**NAS 运行：**[启动入口与共享目录设置](NAS.md)。
+
 The optional [four-GPU DDP recipe](FOUR_GPU.md) uses global batch 4 and the native
 1,000-epoch constant-LR budget. Original single-device commands remain below.
 
