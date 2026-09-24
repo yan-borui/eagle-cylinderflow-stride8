@@ -1,3 +1,5 @@
+**前65帧动力学训练：**[64个时间间隔的训练、恢复和评价入口](PREFIX65.md)。
+
 # CylinderFlow stride-8: EAGLE adaptation
 
 **历史 checkpoint UV 误差表：**[逐点 Validation100、断点续跑与图片交接](TRAINING_CURVE.md)。
