@@ -87,13 +87,15 @@ def aroma_inputs(field, points, stats, device):
     return values.unsqueeze(0), coords.unsqueeze(0)
 
 
-def prepare_clusters(dataset, directory: Path, seed: int) -> None:
+def prepare_clusters(dataset, directory: Path, seed: int, *, indices=None) -> None:
     """Reuse the author's capacity-constrained geometric clustering."""
     from clusterize_eagle import constrained_clustering_numpy
     from .runtime import write_json
 
     directory.mkdir(exist_ok=False)
-    for index in dataset.splits["train"] + dataset.splits["validation"]:
+    if indices is None:
+        indices = dataset.splits["train"] + dataset.splits["validation"]
+    for index in indices:
         points = dataset.static(index)["points"]
         np.random.seed(seed + index)
         capacity = 10
